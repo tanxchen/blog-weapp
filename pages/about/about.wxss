@@ -1,0 +1,12 @@
+.wrap {
+  padding: 20px;
+}
+.title {
+  font-size: 22px;
+  font-weight: 600;
+}
+.desc {
+  margin-top: 10px;
+  font-size: 18px;
+  line-height: 1.6;
+}

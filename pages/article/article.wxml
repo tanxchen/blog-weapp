@@ -1,0 +1,7 @@
+<view class='item'>
+  <view class='title'>{{article.title}}</view>
+  <view class='create-date'>{{article.meta.createDate}}</view>
+  <view class='desc'>
+  <wemark md="{{article.content}}" link highlight type="wemark"></wemark>
+  </view>
+</view>

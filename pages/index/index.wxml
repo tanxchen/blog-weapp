@@ -1,0 +1,11 @@
+<view class="hander">
+  <image class="logo" src="../../assets/images/r-logo.png"></image>
+  <view class="motto">Stay Hungry. Stay Foolish.</view>
+</view>
+<view class='wrap' wx:for="{{articles}}" wx:key="{{index}}">
+  <view class='item' data-id="{{item._id}}" bindtap='goToDetailPage'>
+    <view class='title'>{{item.title}}</view>
+    <view class='create-date'>{{item.meta.createDate}}</view>
+    <view class='desc'>{{item.content}}</view>
+  </view>
+</view>

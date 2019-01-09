@@ -1,0 +1,16 @@
+.item {
+  padding: 40rpx;
+}
+.title {
+  font-size: 40rpx;
+  font-weight: 600;
+}
+.create-date {
+  font-size: 28rpx;
+  color:#a1a1a1;
+  margin-top: 4px;
+}
+.desc {
+  margin-top: 8px;
+  font-size: 14px;
+}
