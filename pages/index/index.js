@@ -16,7 +16,6 @@ Page({
   onLoad: function () {
     app.post('/api/articles', {}, 'GET')
       .then(res => {
-        console.log(res)
         this.setData({
           articles: res
         })

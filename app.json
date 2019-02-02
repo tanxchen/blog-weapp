@@ -4,6 +4,9 @@
     "pages/article/article",
     "pages/about/about"
   ],
+  "usingComponents": {
+    "wemark": "./components/wemark/wemark"
+  },
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",

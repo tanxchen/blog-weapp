@@ -1,3 +1,5 @@
+<wxs module="filter" src="../../utils/filter.wxs"></wxs>
+
 <view class="hander">
   <image class="logo" src="../../assets/images/r-logo.png"></image>
   <view class="motto">Stay Hungry. Stay Foolish.</view>
@@ -5,7 +7,10 @@
 <view class='wrap' wx:for="{{articles}}" wx:key="{{index}}">
   <view class='item' data-id="{{item._id}}" bindtap='goToDetailPage'>
     <view class='title'>{{item.title}}</view>
-    <view class='create-date'>{{item.meta.createDate}}</view>
-    <view class='desc'>{{item.content}}</view>
+    <view class='create-date'>
+      {{filter.formatDate(item.meta.createDate, 'yyyy-MM-dd')}}</view>
+    <view class='desc'>
+      {{filter.mdreplace(item.content)}}
+    </view>
   </view>
 </view>

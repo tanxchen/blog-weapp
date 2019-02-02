@@ -1,6 +1,10 @@
+<wxs module="filter" src="../../utils/filter.wxs"></wxs>
+
 <view class='item'>
   <view class='title'>{{article.title}}</view>
-  <view class='create-date'>{{article.meta.createDate}}</view>
+  <view class='create-date'>
+    {{filter.formatDate(article.meta.createDate, 'yyyy-MM-dd')}}
+  </view>
   <view class='desc'>
   <wemark md="{{article.content}}" link highlight type="wemark"></wemark>
   </view>

@@ -1,6 +1,3 @@
 {
-  "navigationBarTitleText": "",
-  "usingComponents": {
-    "wemark": "../../components/wemark/wemark"
-  }
+  "navigationBarTitleText": ""
 }

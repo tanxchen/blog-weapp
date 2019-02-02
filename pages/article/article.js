@@ -6,10 +6,8 @@ Page({
   },
 
   onLoad: function (options) {
-    console.log(options)
     app.post(`/api/article/${options.id}`, {}, 'GET')
       .then(res => {
-        console.log(res)
         this.setData({
           article: res
         })
