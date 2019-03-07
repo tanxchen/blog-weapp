@@ -4,16 +4,21 @@ const app = getApp()
 
 Page({
   data: {
-    articles: []
+    articles: [],
+    params: ''
   },
   goToDetailPage (e) {
-    console.log()
     wx.navigateTo({
       url: `../article/article?id=${e.currentTarget.dataset.id}`
     })
   },
 
-  onLoad: function () {
+  onLoad: function (p) {
+    // console.log(JSON.stringify(p))
+    // console.log(getCurrentPages())
+    // this.setData({
+    //   params: JSON.stringify(p)
+    // })
     app.post('/api/articles', {}, 'GET')
       .then(res => {
         this.setData({
