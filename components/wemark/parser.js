@@ -5,7 +5,6 @@ var parser = new Remarkable({
 var prism = require('./prism');
 
 function parse(md, options){
-
 	if(!options) options = {};
 	var tokens = parser.parse(md, {});
 
@@ -23,7 +22,7 @@ function parse(md, options){
 	var getInlineContent = function(inlineToken){
 		var ret = [];
 		var env;
-		var tokenData = {};
+    var tokenData = {};
 
 		if(inlineToken.type === 'htmlblock'){
 			// 匹配video
@@ -45,9 +44,35 @@ function parse(md, options){
 
 					ret.push(retParam);
 				}
-			}
+      }
+      // 处理 <img src="... 情况
+      // var imageRegExp = /<img.*?src\s*=\s*['"]*([^\s^'^"]+).*?(poster\s*=\s*['"]*([^\s^'^"]+).*?)?(?:\/\s*>|>)/g;
+      // var imgText = inlineToken.content.match(imageRegExp)
+      // if (imgText) {
+      //   var imgSrc = imgText[0].split(' ').filter(item => item.indexOf('src="') !== -1)[0].split('=')[1].replace(/"/g, '')
+      //   return getInlineContent({
+      //     type: 'inline',
+      //     children: [{
+      //       alt: 'all',
+      //       level: 0,
+      //       src: imgSrc,
+      //       title: '',
+      //       type: 'image'
+      //     }],
+      //     level: 1,
+      //     content: `![all](${imgSrc})`,
+      //     lines: inlineToken.lines
+      //   })
+      //   // ret.push({
+      //   //   alt: 'all',
+      //   //   level: 0,
+      //   //   src: imgSrc,
+      //   //   title: '',
+      //   //   type: 'image'
+      //   // });
+      // }
+
 		}else{
-			// console.log(inlineToken);
 			inlineToken.children && inlineToken.children.forEach(function(token, index){
 				if(['text', 'code'].indexOf(token.type) > -1){
 					ret.push({
@@ -57,7 +82,18 @@ function parse(md, options){
 					});
 					env = '';
 					tokenData = {};
-				}else if(token.type === 'del_open'){
+        }else if (token.type === 'htmltag' && token.content === '<br>') {
+          ret.push({ type: 'text', content: '\n' });
+        } else if (token.type === 'htmltag' && token.content.indexOf('<img') !== -1) {
+          var imageRegExp = /<img.*?src\s*=\s*['"]*([^\s^'^"]+).*?(poster\s*=\s*['"]*([^\s^'^"]+).*?)?(?:\/\s*>|>)/g;
+          var text = token.content.match(imageRegExp)
+          if (text) {
+            ret.push({
+              type: 'image',
+              src: text[0].split(' ').filter(item => item.indexOf('src="') !== -1 )[0].split('=')[1].replace(/"/g, '')
+            });
+          }
+        }else if(token.type === 'del_open'){
 					env = 'deleted';
 				}else if (token.type === 'softbreak') {
 					// todo:处理li的问题
@@ -93,10 +129,10 @@ function parse(md, options){
 					ret.push({
 						type: token.type,
 						src: token.src
-					});
+          });
 				}
 			});
-		}
+    }
 
 		return ret;
 	};
@@ -143,29 +179,48 @@ function parse(md, options){
 				highlight = true;
 			}
 
-			// flatten nested tokens in html
-			if (blockToken.params === 'html') {
-				const flattenTokens = (tokensArr, result = [], parentType = '') => {
-					if (tokensArr.constructor === Array) {
-						tokensArr.forEach(el => {
-							if (typeof el === 'object') {
-								el.type = parentType + ' wemark_inline_code_' + el.type
-								flattenTokens(el.content, result, el.type)
-							} else {
-								const obj = {}
-								obj.type = parentType + ' wemark_inline_code_'
-								obj.content = el
-								result.push(obj)
+			const flattenTokens = (tokensArr, result = [], parentType = '') => {
+				if (Array.isArray(tokensArr)) {
+					tokensArr.forEach(el => {
+						if (typeof el === 'object') {
+							// el.type = parentType + ' wemark_inline_code_' + el.type;
+							if(Array.isArray(el.content)){
+								flattenTokens(el.content, result, el.type);
+							}else{
+								flattenTokens(el, result, el.type);
 							}
-						})
-						return result
-					} else {
-						result.push(tokensArr)
-						return result
-					}
+						} else {
+							const obj = {};
+							obj.type = parentType || 'text';
+							// obj.type = parentType + ' wemark_inline_code_';
+							obj.content = el;
+							result.push(obj);
+						}
+					})
+					return result
+				} else {
+					result.push(tokensArr)
+					return result
 				}
-				content = flattenTokens(content)
 			}
+
+			if(highlight){
+				var tokenList = content;
+				content = [];
+				tokenList.forEach((token) => {
+					// let contentListForToken = [];
+					if(Array.isArray(token.content)){
+						content = content.concat(flattenTokens(token.content, [], ''));
+					}else{
+						content.push(token);
+					}
+				});
+			}
+			// flatten nested tokens in html
+			// if (blockToken.params === 'html') {
+				// content = flattenTokens(content)
+			// }
+			// console.log(content);
 
 			return {
 				type: 'code',
