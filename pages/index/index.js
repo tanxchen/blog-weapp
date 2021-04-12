@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
+import articles from '../../data/articles.js'
 
 Page({
   data: {
@@ -13,20 +14,18 @@ Page({
     })
   },
 
-  onLoad: function (p) {
-    // console.log(JSON.stringify(p))
-    // console.log(getCurrentPages())
-    // this.setData({
-    //   params: JSON.stringify(p)
-    // })
-    app.post('/api/articles', {}, 'GET')
-      .then(res => {
-        this.setData({
-          articles: res
-        })
-      })
-      .catch(error => {
-        console.log(error)
-      })
+  onLoad() {
+    this.setData({
+      articles: articles
+    })
+    // app.post('/api/articles', {}, 'GET')
+    //   .then(res => {
+    //     this.setData({
+    //       articles: res
+    //     })
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
   }
 })

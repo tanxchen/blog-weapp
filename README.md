@@ -1,4 +1,4 @@
-[个人博客](https://blog.ryanxchen.com)小程序版本
+[个人博客](https://ryanxchen.github.io/blog)小程序版本
 
 预览地址：
 
